@@ -1,0 +1,3 @@
+import {NextResponse} from "next/server";
+import {createServerSupabase} from "@/lib/supabase/server";
+export async function GET(){try{const supabase=await createServerSupabase();const {data:{user}}=await supabase.auth.getUser();if(!user)return NextResponse.json({error:"Não autenticado"},{status:401});const {data:profile}=await supabase.from("profiles").select("role").eq("id",user.id).maybeSingle();if(profile?.role!=="admin")return NextResponse.json({error:"Acesso restrito"},{status:403});return NextResponse.json({service:"Sal & Bit",database:"authenticated",openMeteo:"verifique /api/forecast por pico",timestamp:new Date().toISOString()});}catch{return NextResponse.json({error:"Serviço indisponível"},{status:503})}}
