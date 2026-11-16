@@ -11,7 +11,7 @@ export default function Home(){
  const supabase=useMemo(()=>createClient(),[]);
  useEffect(()=>{if(!supabase)return;supabase.auth.getUser().then(({data})=>setLogged(!!data.user));const {data:listener}=supabase.auth.onAuthStateChange((_e,session)=>setLogged(!!session));return()=>listener.subscription.unsubscribe()},[supabase]);
  async function load(){setLoading(true);setError("");try{const result=await Promise.all(PEAKS.map(async peak=>{const res=await fetch(`/api/forecast?peak=${peak.id}&sport=${sport}&level=${level}`);if(!res.ok)throw new Error("Falha ao atualizar as condições");return res.json()}));setData(result)}catch(e){setError(e instanceof Error?e.message:"Erro ao consultar previsão");}finally{setLoading(false)}}
- useEffect(()=>{load()},[]);
+ useEffect(()=>{load()},[sport,level]);
  const ranked=[...data].sort((a,b)=>b.score-a.score); const active=ranked.find(x=>x.peak.id===selected)||ranked[0];
  async function login(){if(!supabase){setError("Configure as variáveis do Supabase para ativar o Google Login.");return;}const redirect=typeof window!=="undefined"?window.location.origin+"/auth/callback":"";const {error}=await supabase.auth.signInWithOAuth({provider:"google",options:{redirectTo:redirect}});if(error)setError(error.message)}
  return <main className={theme==="sun"?"sun min-h-screen":"min-h-screen"}>
