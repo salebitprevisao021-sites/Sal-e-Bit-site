@@ -47,7 +47,7 @@ alter table public.coupons enable row level security;
 alter table public.audit_logs enable row level security;
 alter table public.reports enable row level security;
 create policy "profiles are readable" on public.profiles for select using (true);
-create policy "profile owner updates safe fields" on public.profiles for update using(auth.uid()=id) with check(auth.uid()=id and role=(select p.role from public.profiles p where p.id=auth.uid()));
+create policy "profile owner updates safe fields" on public.profiles for update using(auth.uid()=id) with check(auth.uid()=id);
 create policy "peaks are public" on public.peaks for select using(true);
 create policy "checkins public read" on public.checkins for select using(true);
 create policy "partners create checkins" on public.checkins for insert with check(auth.uid()=user_id and exists(select 1 from public.profiles where id=auth.uid() and role in ('parceiro','admin')));
