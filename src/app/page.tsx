@@ -30,7 +30,6 @@ function MapScreen({onBack}:{onBack:()=>void}){
  const [chosen,setChosen]=useState(PEAKS[0].id);
  const key=process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
  const mapEl=useRef<HTMLDivElement|null>(null);
- const selected=PEAKS.find(p=>p.id===chosen)||PEAKS[0];
  useEffect(()=>{
   if(!key||!mapEl.current)return;
   let cancelled=false;
